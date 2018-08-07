@@ -392,7 +392,7 @@
     });
     // 刷新爬取的数据对象
     $("a[href='#lookOK']").click(function(){
-        function spl_pase(i,o){return '<div>'+ i + '-' + o['news_date']+ '-' +'<a style="color: blue;" target="_blank" href="'+o['url_source']+'">'+o['news_title'] +'</a></div>';}
+        function spl_pase(i,o){return '<div>'+ i + '-' + o['news_date']+ '-' +'<a style="color: blue;" target="_blank" href="/pac/r/s//IP/this.show()?url='+o['url_source']+'">'+o['news_title'] +'</a></div>';}
         var showd_html = '';
         var passc = 0;
         for (var i = 0; i < ldos.length; i++) {

@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>{{ title }}</title></head>
+<body>
+    {% if content  %}
+        <div id="html">{{ content }}</div>
+    {% endif %}
+</body>
+
+<!--   Core JS Files   -->
+<script src="/static/js/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/static/js/jquery.bootstrap.js" type="text/javascript"></script>
+
+<!--  Plugin for the Wizard -->
+<script src="/static/js/material-bootstrap-wizard.js"></script>
+
+<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
+<script src="/static/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+
+$("#html").html($("#html").text())
+
+function loadDB(){
+    $.ajax({
+        url:"/db/content/",
+        data:{'url':'utlto'},
+        type:"GET",
+        dataType:"TEXT",
+        success: function(rets){
+            rets = eval(rets);
+            $("title").text(rets['title'])
+            $("body").html(rets['content'])
+            // $("script").html(rets['script'])
+        }
+    });
+}
+// loadDB();
+</script></html>

@@ -270,12 +270,12 @@ class IP(object):
         db = {'title': 'xxxxx', 'content': 'xxxxxxx'}
         if request.method == 'GET':
             url = request.META['QUERY_STRING']
-            if url != '':
+            if url:
                 url = url[str(url).find('http'):]
                 db = self.sdata.db_url_content.get(url)
                 # print('url=' + url)
                 # print(spiders_data.sdata.db_url_content.keys())
-        return render(request, 'index2.html', db)
+        return render(request, 'core/showIP.html', db)
 
     class MyThread(threading.Thread):
         def run(self):
