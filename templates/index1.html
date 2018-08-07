@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WEB-pac</title>
+</head>
+<body>
+
+    <h1><a href="{{ down_url }}">点击下载excel</a></h1>
+    <div class="content">
+        {% for line in data %}
+            <div style="color: red;">{{ line }}</div>
+        {% endfor %}
+            <div>{{ data }}</div>
+    </div>
+
+
+</body>
+</html>
