@@ -26,6 +26,8 @@ STATIC_ROOT = r'C:/Users/cong/Desktop/download/static/' if this_os else r'/opt/p
 
 # 谷歌浏览器插件路径 // 找得到？(环境变量)
 EXECUTABLE_PATH = 'chromedriver'
+# 浏览器头部信息（下载文件时需要携带）
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36'}
 # 运行是否显示浏览器
 EXECUTABLE_RUN_SHOW = True if this_os else False
 # 页面加载超时时间 s

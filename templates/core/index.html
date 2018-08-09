@@ -60,7 +60,7 @@
                     <!--      Wizard container        -->
                     <div class="wizard-container" style="margin: 0 auto; width: 1024px;padding-top: 50px;">
                         <div class="card wizard-card" data-color="red" id="wizard">
-                            <form action="/pac/r/s//addSpidersBase()" method="POST">
+                            <form action="/pac/r/s/:/addSpidersBase()" method="POST">
                         <!--        You can switch " data-color="blue" "  with one of the next bright colors: "green", "orange", "red", "purple"             -->
 
                                 <div class="wizard-header" style="padding: 0;">
@@ -392,7 +392,7 @@
     });
     // 刷新爬取的数据对象
     $("a[href='#lookOK']").click(function(){
-        function spl_pase(i,o){return '<div>'+ i + '-' + o['news_date']+ '-' +'<a style="color: blue;" target="_blank" href="/pac/r/s//IP/this.show()?url='+o['url_source']+'">'+o['news_title'] +'</a></div>';}
+        function spl_pase(i,o){return '<div>'+ i + '-' + o['news_date']+ '-' +'<a style="color: blue;" target="_blank" href="/pac/r/s/:/IP/this.show()?url='+o['url_source']+'">'+o['news_title'] +'</a></div>';}
         var showd_html = '';
         var passc = 0;
         for (var i = 0; i < ldos.length; i++) {
@@ -471,7 +471,7 @@
     }
     function readTo2018(urlend){
         $.ajax({
-            url:"/pac/r/s//LP/this.read_print_test_list_page()",
+            url:"/pac/r/s/:/LP/this.read_print_test_list_page()",
             data:{},
             type:"POST",
             dataType:"TEXT",
@@ -493,7 +493,7 @@
                 clearInterval(LP_to2);// 去掉定时器
                 // 请求后台结束
                 $.ajax({
-                    url:"/pac/r/s//LP/this.stop_test_list_page()",
+                    url:"/pac/r/s/:/LP/this.stop_test_list_page()",
                     type:"POST",
                     data:{'tname':LP_tname},
                     dataType:"TEXT",
@@ -514,7 +514,7 @@
                 }
                 urlend = datas['url_source'] + '_end';
                 $.ajax({
-                    url:"/pac/r/s//LP/this.test_list_page()",
+                    url:"/pac/r/s/:/LP/this.test_list_page()",
                     type:"POST",
                     data:datas,
                     dataType:"TEXT",
@@ -572,7 +572,7 @@
     }
     function IP_readTo2018(urlend){
         $.ajax({
-            url:"/pac/r/s//IP/this.read_print_test_item_page()",
+            url:"/pac/r/s/:/IP/this.read_print_test_item_page()",
             data:{},
             type:"POST",
             dataType:"TEXT",
@@ -594,7 +594,7 @@
                 clearInterval(IP_to2);// 去掉定时器
                 // 请求后台结束
                 $.ajax({
-                    url:"/pac/r/s//IP/this.stop_test_item_page()",
+                    url:"/pac/r/s/:/IP/this.stop_test_item_page()",
                     type:"POST",
                     data:{'tname':IP_tname},
                     dataType:"TEXT",
@@ -624,7 +624,7 @@
                 datas['curl_sources'] = JSON.stringify(page_urls);
                 urlend = page_urls[page_urls.length-1] + '_end';
                 $.ajax({
-                    url:"/pac/r/s//IP/this.test_item_page()",
+                    url:"/pac/r/s/:/IP/this.test_item_page()",
                     type:"POST",
                     data:datas,
                     dataType:"TEXT",

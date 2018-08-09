@@ -8,7 +8,7 @@ app_name = 'core'
 urlpatterns = [
     path('', cv.index),
     url('s/', cv.pathRun),
-    path('test', cv.test),
+    path('test1', cv.test1),
     path('test2', cv.test2),
 ]
 

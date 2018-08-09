@@ -2,7 +2,7 @@
 import os
 import time
 import json
-import requests
+import urllib
 import settings as set
 from lxml import etree
 from selenium.webdriver import Chrome
@@ -16,20 +16,14 @@ from core import util
 
 class TS(object):
 
-    def processRequest(self, URL_TO, dbo):
+    def processRequest(self, driver, dbo):
         self.printT("##########TS.processRequest##########")
 
         contentPage = 1
         contentCount = 0
         DB_URLS = []
         THIS_URLS = {}
-
-        options = Options()
-        if not set.EXECUTABLE_RUN_SHOW:
-            options.add_argument('-headless')  # 无头参数
-        driver = Chrome(executable_path=set.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
-        wait = WebDriverWait(driver, timeout=set.WEBDRIVERWAIT_TIMEOUT)
-
+        URL_TO = driver.current_url
         """ 
         [
             {"wait": '//div[@class="right_left"]'},
@@ -40,17 +34,13 @@ class TS(object):
                     "news_date": [['//td[@align="center"]//a/text()']]}}
         ]
         """
-        dbo_wait = eval(dbo[0])  # {"wait": '//div[@class="right_left"]'}
-        dbo_next = eval(dbo[1])  # {"next": '//div[@id="page_div"]//a[contains(text(), "下一页")]'}
-        dbo_sources = eval(dbo[2])  # {"trs": [['//div[@class="right_left"]//table[2]//tr']]}
-        dbo_source = eval(dbo[3])  # {"tr": {"news_title": [['//td[@height="22"]//a/text()']],
-        #                                    "url_source": [['//td[@height="22"]//a/@href']],
-        #                                    "news_date": [['//td[@align="center"]//a/text()']]}}
+        dbo_wait = eval(dbo[0])
+        dbo_next = eval(dbo[1])
+        dbo_sources = eval(dbo[2])
+        dbo_source = eval(dbo[3])
 
         try:
-            # driver.set_script_timeout(15)
-            driver.get(URL_TO)  # 加载
-
+            wait = WebDriverWait(driver, timeout=set.WEBDRIVERWAIT_TIMEOUT)
             wait.until(EC.visibility_of_element_located((By.XPATH, dbo_wait["wait"])))  # 等待渲染数据
             self.printT('driver.page_source=' + driver.page_source.replace('\n', ''))
         except BaseException as e:
@@ -181,8 +171,6 @@ class TS(object):
 
         self.printT('contentPage=' + str(contentPage))
         self.printT('contentCount=' + str(contentCount))
-        driver.quit()
-        self.printT('driver.quit() end')
         self._s_data.dbo_urls[URL_TO] = list(THIS_URLS.values())
         self.printT('self._s_data.dbo_urls[URL_TO]='+str(len(self._s_data.dbo_urls)))
         return THIS_URLS
@@ -200,9 +188,20 @@ class TS(object):
         self._run_count = int(pt)
         self._runing = True
         dbo = [pw, pn, prs, pr]
-        retss = self.processRequest(url, dbo)  # 执行
-        # self.printT('processRequest(url, dbo) ed')  # 打印
+
+        options = Options()
+        if not set.EXECUTABLE_RUN_SHOW:
+            options.add_argument('-headless')  # 无头参数
+            options.add_argument('--no-sandbox')  # 禁用某个功能，该错误测了两天，颤毛啊！。（原因是运行Chrome浏览器报错，火狐不行）
+            # options.add_argument('--disable-dev-shm-usage')
+        driver = Chrome(executable_path=set.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
+        driver.set_script_timeout(set.WEBDRIVERWAIT_TIMEOUT)
+        driver.get(url)
+        retss = self.processRequest(driver, dbo)  # 执行
+        # self.printT('processRequest(driver, dbo) ed')  # 打印
         self.printT('有效总数据：' + str(len(retss)))  # 打印
+        driver.quit()
+        self.printT('driver.quit() end')  # 打印结束
         for r in retss:
             self.printT(r+'='+str(retss.get(r)))  # 打印
         self.printT(url + '_end')  # 打印结束
@@ -217,32 +216,18 @@ class TS(object):
 
 class T(object):
 
-    def processRequest(self, URL_TO, dbo):
+    def processRequest(self, driver, dbo, url):
         self.printT("##########T.processRequest##########")
 
-        options = Options()
-        if not set.EXECUTABLE_RUN_SHOW:
-            options.add_argument('-headless')  # 无头参数
-        driver = Chrome(executable_path=set.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
-        wait = WebDriverWait(driver, timeout=set.WEBDRIVERWAIT_TIMEOUT)
-
-        """ 
-         [
-            '1',
-            'XPATH',
-            '[[\'//*[@id="container"]/div/div/div[1]/div[2]/div/table/tbody/tr/td/table[1]/tbody/tr/td[2]/table[2]\']]'
-         ]
-        """
+        URL_TO = driver.current_url
         dbo_type = dbo[0]  # '1'
         dbo_rule = dbo[1]  # 'XPATH'
         # dbo_source = json.loads(dbo[2])  # '[["//*[@id=\"container\"]/div/div/div[1]/div[2]/div/table/tbody/tr/td/table[1]/tbody/tr/td[2]/table[2]"]]'
         dbo_source = list(eval(dbo[2]))
 
-        # driver.set_script_timeout(15)
-        driver.get(URL_TO)  # 加载
-
         page = []
         try:
+            wait = WebDriverWait(driver, timeout=set.WEBDRIVERWAIT_TIMEOUT)
             wait.until(EC.visibility_of_element_located((By.XPATH, dbo_source[0][0])))  # 等待渲染数据
             # self.printT('driver.page_source=' + driver.page_source.replace('\n', ''))
 
@@ -258,17 +243,17 @@ class T(object):
             while lbi < len(page):
                 page[lbi] = str(etree.tostring(page[lbi], encoding='utf-8'), 'utf-8')
                 lbi += 1
-            self.printT('page=' + str(page))
+            # self.printT('page=' + str(page))
 
-            if self._runing == False:
+            if not self._runing:
                 return page
             page_content = ''.join(page)
             page_title = etree.HTML(driver.page_source).xpath('/html/head/title/text()')
-            self._s_data.db_url_content[URL_TO] = {'title': page_title, 'content': page_content}
+            self._s_data.db_url_content[url] = {'title': page_title, 'content': page_content}
+            self.printT('self._s_data.db_url_content[url] url='+url)
             self.printT('down=' + self.downIMG({'url': URL_TO, 'content': page_content}))
         except IOError as e:
             self.printT('!!!!!!!!!!find all data over!!!!!!!!!!')
-        driver.quit()
         return page
 
     def downIMG(self, item):
@@ -297,7 +282,7 @@ class T(object):
             except BaseException as e:
                 continue
 
-        if self._runing == False:
+        if not self._runing:
             return '[return]'
         self._s_data.downURLs.update(downURLs)
         self.printT('downURLs=' + str(len(downURLs)))
@@ -310,8 +295,7 @@ class T(object):
         noi = 0
         # 未能正确获得网页 就进行异常处理
         for url in urlsos.keys():
-            self.printT("文件下载:url:" + url)
-            self.printT("文件储存:path:" + urlsos.get(url))
+            self.printT("下载url:%s 储存path:%s" % (url, urlsos.get(url)))
             try:
                 imgPathTo = urlsos.get(url)
                 if not os.path.isdir(imgPathTo[0:imgPathTo.rfind('/')]):
@@ -322,16 +306,16 @@ class T(object):
                     else:
                         self.printT('该文件已存在')
                         return '[return]'
-                r = requests.get(url)
-                r.raise_for_status()
+                r = urllib.request.Request(url=url, headers=set.HEADERS, method='GET')
+                r = urllib.request.urlopen(r)
                 # 使用with语句可以不用自己手动关闭已经打开的文件流
                 with open(imgPathTo, "wb") as f:  # 开始写文件，wb代表写二进制文件
-                    f.write(r.content)
+                    f.write(r.read())
                     self.printT('下载完成')
             except BaseException as e:
                 noi = noi + 1
-                self.printT('未下载成功 e=' + str(e))
-            if self._runing == False:
+                self.printT('下载错误 E:' + str(e))
+            if not self._runing:
                 return '[return]'
         ret = 1
         if noi > 0:
@@ -348,17 +332,26 @@ class T(object):
         retss = []
         url = ''
         urls = json.loads(urls)
+
+        options = Options()
+        if not set.EXECUTABLE_RUN_SHOW:
+            options.add_argument('-headless')  # 无头参数
+            options.add_argument('--no-sandbox')  # 禁用某个功能，该错误测了两天，颤毛啊！。（原因是运行Chrome浏览器报错，火狐不行）
+            # options.add_argument('--disable-dev-shm-usage')
+        driver = Chrome(executable_path=set.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
+        driver.set_script_timeout(set.WEBDRIVERWAIT_TIMEOUT)
+
         for url in urls:
+            driver.get(url)  # 加载
             if self._runing:
                 self.printT(url + '_begin')
-                retss += self.processRequest(url, dbo)  # 执行
+                retss += self.processRequest(driver, dbo, url)  # 执行
                 self.printT(url + '_over')  # 打印结束
             else:
                 break
-        # self.printT('processRequest(url, dbo) ed')  # 打印
-        # for r in retss:
-        # self.printT(str(r))  # 打印
         self.printT('有效总数据：' + str(len(retss)))  # 打印
+        driver.quit()  # 结束浏览器进程
+        self.printT('driver.quit() end')  # 打印结束
         self.printT(url + '_end')  # 打印结束
 
     def test_stop(self):

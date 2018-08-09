@@ -353,28 +353,3 @@ class TX(object):
             self.baseo.up_test_list_dbo()
             print("self.baseo.up_test_list_dbo()")
 
-    class sdatao(object):
-
-        db_dbo = []  # 对应数据库数据
-
-        # 测试爬取分页列表，打印日志
-        test_list_page_prints = []
-
-        # 测试爬取详情页面，打印日志
-        test_item_page_prints = []
-
-        run_count = sets.TEST_RUN_COUNT  # 循环下一页数量
-
-        test_list_page_threads = {}  # 所有爬虫线程集合 {thread-Name, thread}
-
-        dbo_urls = {}  # 爬取列表页数据 {url, [dbo]}
-        dbo_urls_b = True  # 数据有效性，结果是否可以入库
-
-        dbo_resolve_key = {}  # 参数 key 入库所需的参数规则 key ，可根据 key 查看是否已有数据
-
-        db_url_content = {}  # 爬取详情页数据 {url, db}
-
-        downURLs = {}  # 下载资源（图片，文件等）到本地的 url 数据对象 {url, path}
-
-        up_dbo_error_urls = {}  # 爬取异常的数据源，更新回数据库 {url, error}
-

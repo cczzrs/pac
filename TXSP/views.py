@@ -1,9 +1,9 @@
 from django.shortcuts import render, HttpResponse
 import settings
 from dateutil import parser
-from core import util, cache
+from core import util
 from core.models import SpidersBaseSource
-from . import testSpider
+from . import testSpider, cache
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -49,7 +49,7 @@ def test_to_runing(request, resolve_key, db_dbo_new=None):  # 运行爬虫
         db_dbo_new = SpidersBaseSource.get_by_resolve_key(resolve_key)
         print('test_to_runing SpidersBaseSource.get_SpidersBaseSource_by_resolve_key(resolve_key)ed:'+str(len(db_dbo_new)))
     txo = testSpider.TX()
-    txo.sdata = txo.sdatao()  # 初始化独立数据对象
+    txo.sdata = cache.sdatao()  # 初始化独立数据对象
     txo.sdata.db_dbo = db_dbo_new
     cache.Data.txos[resolve_key] = txo
     # txo.test_list_page_runing(request, resolve_key)
