@@ -179,7 +179,8 @@ class TS(object):
         self.printT('self._s_data.dbo_urls[URL_TO]=' + str(len(self._s_data.dbo_urls)))
         return THIS_URLS
 
-    def test_run_buid(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data):
+    def test_run_buid(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data, to_log):
+        print(to_log)
         TS().test_run(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data)
 
     def test_run(self, url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data):
@@ -323,12 +324,12 @@ class TX(object):
                     for dbo in self.dbos:
                         dbo = eval(str(dbo))
                         count += 1
-                        print('MyThread:%s [%s/%s] TO url_source=%s' % (SName, count, sums, dbo['url_source']))
+                        to_log = 'MyThread:%s [%s/%s] TO url_source=%s' % (SName, count, sums, dbo['url_source'])
                         self.threadpooles.submit(testSpider.TS.test_run_buid,
                                                  dbo['url_source'], dbo['resolve_page_wait'],
                                                  dbo['resolve_next_page'], dbo['resolve_type'],
                                                  dbo['resolve_rule'], dbo['resolve_sources'],
-                                                 dbo['resolve_source'], self.b_date, self.e_date, self.s_data)
+                                                 dbo['resolve_source'], self.b_date, self.e_date, self.s_data, to_log)
 
             except BaseException as e:
                 self.s_data.dbo_urls_b = False
