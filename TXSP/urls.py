@@ -1,5 +1,3 @@
-from users import views
-from django.conf.urls import url, include
 from django.urls import path
 from TXSP import views as txv
 

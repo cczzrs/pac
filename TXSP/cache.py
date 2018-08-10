@@ -1,3 +1,4 @@
+from TXSP import settings
 
 
 class Data(object):
@@ -18,7 +19,7 @@ class sdatao(object):
         # 测试爬取详情页面，打印日志
         self.test_item_page_prints = []
 
-        self.run_count = sets.TEST_RUN_COUNT  # 循环下一页数量
+        self.run_count = settings.TEST_RUN_COUNT  # 循环下一页数量
 
         self.test_list_page_threads = {}  # 所有爬虫线程集合 {thread-Name, thread}
 

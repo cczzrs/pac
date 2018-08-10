@@ -3,7 +3,6 @@ import os
 import time
 import json
 import urllib
-import settings as set
 from lxml import etree
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
@@ -11,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from dateutil import parser
-from core import util
+from core import util, settings as set
 
 
 class TS(object):

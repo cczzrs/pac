@@ -1,41 +1,30 @@
 # coding=utf-8
-import settings as sets
+import time
+import threading
+from dateutil import parser
 from lxml import etree
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from dateutil import parser
-from core import util, cache, models
-from core.models import SpidersBaseSource
 from django.shortcuts import render, HttpResponse
-import time
-import threading
-from TXSP import testSpider
 from concurrent.futures import ThreadPoolExecutor
+from core import util, models
+from TXSP import testSpider, cache, settings as sets
 
 
 class TS(object):
 
-    def processRequest(self, URL_TO, dbo):
+    def processRequest(self, URL_TO, dbo, driver):
         self.printT("##########TS.processRequest##########")
 
         contentPage = 1
         contentCount = 0
         DB_URLS = []
         THIS_URLS = {}
-        driver = None
 
         try:
-            options = Options()
-            if not sets.EXECUTABLE_RUN_SHOW:
-                options.add_argument('-headless')  # 无头参数
-                options.add_argument('--no-sandbox')  # 禁用某个功能，该错误测了两天，颤毛啊！。（原因是运行Chrome浏览器报错，火狐不行）
-                # options.add_argument('--disable-dev-shm-usage')
-            driver = Chrome(executable_path=sets.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
-            wait = WebDriverWait(driver, timeout=sets.WEBDRIVERWAIT_TIMEOUT)
-
             """ 
             [
                 {"wait": '//div[@class="right_left"]'},
@@ -46,16 +35,12 @@ class TS(object):
                         "news_date": [['//td[@align="center"]//a/text()']]}}
             ]
             """
-            dbo_wait = eval(dbo[0])  # {"wait": '//div[@class="right_left"]'}
-            dbo_next = eval(dbo[1])  # {"next": '//div[@id="page_div"]//a[contains(text(), "下一页")]'}
-            dbo_sources = eval(dbo[2])  # {"trs": [['//div[@class="right_left"]//table[2]//tr']]}
-            dbo_source = eval(dbo[3])  # {"tr": {"news_title": [['//td[@height="22"]//a/text()']],
-            #                                    "url_source": [['//td[@height="22"]//a/@href']],
-            #                                    "news_date": [['//td[@align="center"]//a/text()']]}}
+            dbo_wait = eval(dbo[0])
+            dbo_next = eval(dbo[1])
+            dbo_sources = eval(dbo[2])
+            dbo_source = eval(dbo[3])
 
-            # driver.set_script_timeout(15)
-            driver.get(URL_TO)  # 加载
-
+            wait = WebDriverWait(driver, timeout=sets.WEBDRIVERWAIT_TIMEOUT)
             wait.until(EC.visibility_of_element_located((By.XPATH, dbo_wait["wait"])))  # 等待渲染数据
             self.printT('driver.page_source=' + driver.page_source.replace('\n', ''))
 
@@ -189,8 +174,6 @@ class TS(object):
             self.printT('processRequest ERROR e=' + str(e))
         self.printT('contentPage=' + str(contentPage))
         self.printT('contentCount=' + str(contentCount))
-        driver.quit()
-        self.printT('driver.quit() end')
         if len(THIS_URLS) > 0:
             self._s_data.dbo_urls[URL_TO] = list(THIS_URLS.values())
         self.printT('self._s_data.dbo_urls[URL_TO]=' + str(len(self._s_data.dbo_urls)))
@@ -211,12 +194,24 @@ class TS(object):
             self._run_count = s_data.run_count
             self._runing = True
             dbo = [pw, pn, prs, pr]
-            retss = self.processRequest(url, dbo)  # 执行
+
+            options = Options()
+            if not sets.EXECUTABLE_RUN_SHOW:
+                options.add_argument('-headless')  # 无头参数
+                options.add_argument('--no-sandbox')  # 禁用某个功能，该错误测了两天，颤毛啊！。（原因是运行Chrome浏览器报错，火狐不行）
+                # options.add_argument('--disable-dev-shm-usage')
+            driver = Chrome(executable_path=sets.EXECUTABLE_PATH, chrome_options=options)  # 配了环境变量第一个参数就可以省了，不然传绝对路径
+            driver.set_script_timeout(sets.WEBDRIVERWAIT_TIMEOUT)
+            driver.get(url)  # 加载
+
+            retss = self.processRequest(url, dbo, driver)  # 执行
+
+            driver.quit()
+            print('driver.quit() end')
             if not self._runing:
                 # self._s_data.dbo_urls_b = False  # 暂不标记为 全局数据无效
                 self._s_data.up_dbo_error_urls[url] = self._e  # 异常数据 url 个更新状态到数据
-
-            # self.printT('processRequest(url, dbo) ed')
+            # self.printT('processRequest(url, dbo, driver) ed')
             self.printT('有效总数据：' + str(len(retss)))
             for r in retss:
                 self.printT(r+'='+str(retss.get(r)))
@@ -226,6 +221,8 @@ class TS(object):
             self._e = e
             self._s_data.up_dbo_error_urls[url] = self._e  # 异常数据 url 个更新状态到数据
             self.printT('test_run ERROR e='+str(e))
+            driver.quit()
+            print('driver.quit() end')
 
     def test_stop(self):
         self._runing = False
@@ -308,6 +305,7 @@ class TX(object):
             self.sdata.dbo_urls = {}
             print('self.MyThread().start() '+str(self.sdata.dbo_resolve_key))
             ret = self.MyThread(self.sdata.db_dbo, b_date, e_date, self)
+
             ret.start()
             self.sdata.test_list_page_threads[ret.getName()] = ret
             print('self.MyThread().start().getName() '+str(ret.getName()))
@@ -315,26 +313,32 @@ class TX(object):
 
     class MyThread(threading.Thread):
         def run(self):
-            print('run MyThread:'+str(self.getName()))
+            SName = self.getName()
+            print('run MyThread:'+str())
             try:
-                self.threadpooles = ThreadPoolExecutor(sets.TESK_THREAD_POOL_EXECUTOR_LEN)
+                self.threadpooles = ThreadPoolExecutor(sets.TESK_THREAD_POOL_EXECUTOR_LEN)  # 创建线程池
                 with self.threadpooles:
+                    sums = len(self.dbos)
+                    count = 0
                     for dbo in self.dbos:
                         dbo = eval(str(dbo))
+                        count += 1
+                        print('MyThread:%s [%s/%s] TO url_source=%s' % (SName, count, sums, dbo['url_source']))
                         self.threadpooles.submit(testSpider.TS.test_run_buid,
                                                  dbo['url_source'], dbo['resolve_page_wait'],
                                                  dbo['resolve_next_page'], dbo['resolve_type'],
                                                  dbo['resolve_rule'], dbo['resolve_sources'],
                                                  dbo['resolve_source'], self.b_date, self.e_date, self.s_data)
+
             except BaseException as e:
                 self.s_data.dbo_urls_b = False
-                print("MyThread-ERROR: "+str(e))
+                print("MyThread:%s ERROR:%s" % (SName, str(e)))
 
             self.baseo.up_test_list_dbo()
-            print("self.baseo.up_test_list_dbo()")
+            print("MyThread:%s self.baseo.up_test_list_dbo()" % SName)
 
             self.s_data.test_list_page_threads.pop(self.getName())
-            print("over MyThread test_list_page_threads.pop(self.getName()): "+str(self.getName()))
+            print("MyThread:%s over MyThread test_list_page_threads.pop(self.getName()):%s " % (SName, self.getName()))
 
         def __init__(self, dbos, b_date, e_date, baseo):
             threading.Thread.__init__(self)

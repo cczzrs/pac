@@ -1,7 +1,5 @@
 import threading, pickle, json
-from pac import urls
 from core import SpiderBase, cache
-from core.models import SpidersBaseSource
 from django.shortcuts import render, HttpResponse
 
 
