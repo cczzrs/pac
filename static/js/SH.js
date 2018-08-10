@@ -1,3 +1,6 @@
+// 该文件为输入模板
+// 请将下一行'@'与'@'之间的数据，保存到网页收藏标签内容，点击标签执行，即初始化模板数据
+// @javascript:(function(){jsCode=document.createElement('script');jsCode.setAttribute('src','http://211.159.163.183:5050/static/js/SH.js');document.body.appendChild(jsCode);}());@
 $.fn.auto_show = function(s){
 	var ss = s.split('');
 	var self = $(this);
