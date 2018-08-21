@@ -4,7 +4,96 @@ from core.models import SpidersBaseSource
 from django.shortcuts import render, HttpResponse
 
 
-def index(request):
+def index_mg(request):  # 管理首页
+    dbs = SpidersBaseSource.tfilter()
+    return render(request, 'core/manage/index.html', {'dbs': dbs})
+
+
+def index_cl(request):  # 控制台
+    dbs = SpidersBaseSource.tfilter()
+    return render(request, 'core/manage/control.html', {'dbs': dbs})
+
+
+def index_look(request):  # 查看
+    tid = int(request.GET.get('tid'))
+    dbi = SpidersBaseSource.get(id=tid)
+    return render(request, 'core/index.html', {'dbi': dbi, 'look': True})
+
+
+def index_edit(request):  # 编辑
+    tid = int(request.GET.get('tid'))
+    dbi = SpidersBaseSource.get(id=tid)
+    return render(request, 'core/index.html', {'dbi': dbi, 'edit': True})
+
+
+def index_del(request):  # 删除
+    ret = 'no body!'
+    status = '401'
+    # request.POST
+    if request.method == 'POST':
+        tid = request.POST.get('tid', None)
+        if tid:
+            print('SpidersBaseSource.update()')
+            update = {'url_type': '0'}
+            print('index_del tid=%s, update=%s' % (tid, str(update)))
+            ret = list(SpidersBaseSource.objects.filter(id=tid).update(**update))
+            status = '200'
+    return HttpResponse(str({'status': status, 'tid': ret}))
+
+
+def index_qiy(request):  # 启用
+    ret = 'no body!'
+    status = '401'
+    # request.POST
+    if request.method == 'POST':
+        tid = request.POST.get('tid', None)
+        if tid:
+            print('SpidersBaseSource.update()')
+            update = {'url_type': '2'}
+            print('index_del tid=%s, update=%s' % (tid, update))
+            ret = list(SpidersBaseSource.objects.filter(id=tid).update(**update))
+            status = '200'
+    return HttpResponse(str({'status': status, 'tid': ret}))
+
+
+def index_up(request):  # 更新
+    ret = 'no body!'
+    status = '401'
+    # request.POST
+    if request.method == 'POST':
+        tid = request.POST.get('id', None)
+        if tid:
+            sbs = SpidersBaseSource.objects.get(id=tid)
+            sbs.service_type = request.POST.get('service_type', None)
+            sbs.area = request.POST.get('area', None)
+            sbs.province = request.POST.get('province', None)
+            sbs.city = request.POST.get('city', None)
+            sbs.tags = request.POST.get('tags', None)
+            sbs.url_source = request.POST.get('url_source', None)
+            sbs.url_type = request.POST.get('url_type', None)
+            sbs.resolve_type = request.POST.get('resolve_type', None)
+            sbs.resolve_rule = request.POST.get('resolve_rule', None)
+            sbs.resolve_source = request.POST.get('resolve_source', None)
+            sbs.resolve_sources = request.POST.get('resolve_sources', None)
+            sbs.resolve_next_page = request.POST.get('resolve_next_page', None)
+            sbs.resolve_page_wait = request.POST.get('resolve_page_wait', None)
+            # sbs.run_time = request.POST.get('run_time', None)
+            sbs.run_count = request.POST.get('run_count', 0)
+            sbs.content_page_rule = {}
+            sbs.content_page_rule['resolve_type'] = request.POST.get('cresolve_type', None)
+            sbs.content_page_rule['resolve_rule'] = request.POST.get('cresolve_rule', None)
+            sbs.content_page_rule['resolve_source'] = request.POST.get('cresolve_source', None)
+            sbs.bz1 = request.POST.get('bz1', None)
+            sbs.bz2 = request.POST.get('bz2', None)
+            print(sbs)
+            print('sbs.update()')
+            ret = sbs.save()
+            ret = str(sbs.id)
+            status = '200'
+    return HttpResponse(str({'status': status, 'tid': ret}))
+
+
+def index_db(request):  # 录数据页面
     if request.session.session_key not in cache.Data.LPs.keys():
         pac_list_page = tests.pac_list_page()
         pac_item_page = tests.pac_item_page()
@@ -60,8 +149,9 @@ def index3(request):
     return render(request, 'index.html', {'data': request.user})
 
 
-def addSpidersBase(request):
+def addSpidersBase(request):  # 添加
     ret = 'no body!'
+    status = '401'
     # request.POST
     if request.method == 'POST':
         sbs = SpidersBaseSource()
@@ -93,7 +183,8 @@ def addSpidersBase(request):
         ret = sbs.save()
         print('return HttpResponse(str(ret))')
         ret = str(sbs.id)
-    return HttpResponse(ret)
+        status = '200'
+    return HttpResponse({'status': status, 'tid': ret})
 
 
 # 实现参数执行函数

@@ -283,8 +283,14 @@
 		                                    </div>
 		                                </div>
 
-    	                                <div style="margin-top: 55px;">
-    	                                	<label class="control-label"><b><p name="look_pl_pass"></p></b></label>
+    	                                <div style="margin-top: 55px;width: 500px;">
+    	                                	<!-- <label class="control-label"><b><p name="look_pl_pass"></p></b></label> -->
+    	                                	<div id="look_pl_pass" class="progress progress-striped">
+            							  		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;background-color: #e54133;">
+            							    	<span class="">100% http://</span>
+	            							  	</div>
+	            							</div>
+
     	                                </div>
 		                            </div>
 		                        </div>
@@ -387,11 +393,18 @@
 			if (status && status == 1) {
 				$("p[name='gx_count']").html($("p[name='gx_count']").html().replace('{x}', gx));
 				$("p[name='zx_count']").html($("p[name='zx_count']").html().replace('{x}', zx));
-				$("p[name='look_pl_pass']").html('检索完毕！');
+				$("#look_pl_pass div").attr('aria-valuenow', '100');
+				$("#look_pl_pass div").width('100%');
+				$("#look_pl_pass div span").html('100%');
+				$("#look_pl_pass").removeClass('active');
+
 			}else{
 				$("p[name='gx_count']").html('共有更新 {x} 条');
 				$("p[name='zx_count']").html('最新 {x} 条');
-				$("p[name='look_pl_pass']").html('正在努力检索。。。');				
+				$("#look_pl_pass div").attr('aria-valuenow', '50');
+				$("#look_pl_pass div").width('50%');
+				$("#look_pl_pass div span").html('50%');
+				$("#look_pl_pass").addClass('active');
 			}
 		}
 

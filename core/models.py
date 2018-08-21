@@ -62,7 +62,10 @@ class SpidersBaseSource(models.Model):
     bz2 = models.CharField(max_length=255, blank=True, null=True)
 
     def tfilter(**p):
-        return list(SpidersBaseSource.objects.filter(**p))
+        return list(SpidersBaseSource.objects.exclude(url_type=0).filter(**p))
+
+    def get(**p):
+        return SpidersBaseSource.objects.exclude(url_type=0).get(**p)
 
     def get_by_resolve_key(resolve_key):
         p = eval(resolve_key)
