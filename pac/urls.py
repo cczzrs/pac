@@ -26,4 +26,6 @@ urlpatterns = [
     path('pac/r/', include('core.urls'), name='core'),  # 爬虫数据规则检索 体系
 
     path('pac/txv/', include('TXSP.urls'), name='TXSP'),  # 爬虫数据检索提醒 体系
+
+    path('pac/chart/', include('chart.urls'), name='chart'),  # 爬虫数据图形展示
 ]

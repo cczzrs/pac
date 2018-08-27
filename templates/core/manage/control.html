@@ -103,20 +103,14 @@
                                     <div class="am-u-md-6">
                                         <!-- Step Line -->
                                         <div class="card-box">
-                                            <div  id="pie3" style="width: 100%;height: 560px;"></div>
+                                            <div  id="pie3" style="width: 100%;height: 400px;"></div>
                                         </div>
                                     </div>
 
                                     <div class="am-u-md-6">
                                         <!-- 大数据面积图  -->
                                         <div class="card-box">
-                                            <div  id="shuju" style="width: 100%;height: 200px;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="am-u-md-6">
-                                        <!-- 堆叠区域图  -->
-                                        <div class="card-box">
-                                            <div  id="columnar2" style="width: 100%;height: 300px;"></div>
+                                            <div  id="shuju" style="width: 100%;height: 400px;"></div>
                                         </div>
                                     </div>
                     			</div>
@@ -155,11 +149,448 @@
 
     <!-- chart -->
     <script type="text/javascript" src="/asset/js/charts/echarts.min.js" ></script>
-    <script type="text/javascript" src="/asset/js/charts/controlChart.js" ></script>
+    <!-- <script type="text/javascript" src="/asset/js/charts/controlChart.js" ></script> -->
 
     <script type="text/javascript">
-    $(function(){
-    });
+    
+
+    var charto = {}; // 显示图形集合
+     
+    //饼状图
+    (function(){
+        if(!document.getElementById("pie3"))return; 
+    var pie3 = echarts.init(document.getElementById("pie3"));
+
+    option = {
+        title : {
+            text: '所有网址爬取结果类型',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                selectedMode: 'single',
+                data:[
+                    {value:335, name:'直接访问'},
+                    {value:310, name:'邮件营销'},
+                    {value:234, name:'联盟广告'},
+                    {value:135, name:'视频广告'},
+                    {value:1548, name:'搜索引擎'}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    pie3.setOption(option);
+    })();
+
+
+    //饼状大图
+    var pie3_3 = {};
+    var pie3_3_option = {};
+    (function(){
+        if(!document.getElementById("pie3_3"))return; 
+        pie3_3 = echarts.init(document.getElementById("pie3_3"));
+        var db_url_type = {{db_url_type|safe}};
+        var db_url_type_name = {{db_url_type_name|safe}};
+        var db_url_type_value = {{db_url_type_value|safe}};
+
+        var db_service_type = {{db_service_type|safe}};
+        var db_service_type_name = {{db_service_type_name|safe}};
+        var db_service_type_value = {{db_service_type_value|safe}};
+
+        var db_city= {{db_city|safe}};
+        var db_city_name = {{db_city_name|safe}};
+        var db_city_value = {{db_city_value|safe}};
+
+        var db_area= {{db_area|safe}};
+        var db_area_name = {{db_area_name|safe}};
+        var db_area_value = {{db_area_value|safe}};
+
+        var db_province= {{db_province|safe}};
+        var db_province_name = {{db_province_name|safe}};
+        var db_province_value = {{db_province_value|safe}};
+        
+        
+        var db_name = [];
+        db_name.push(...db_url_type_name);
+        // db_name.push(...db_service_type_name);
+        // db_name.push(...db_city_name);
+        db_name.push(...db_area_name);
+        db_name.push(...db_province_name);
+
+    option = {
+        title : {
+            text: '数据库实时主数据',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            top: 'top',
+            bottom: '0',
+            data: db_name
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name: '数据状态',
+                type: 'pie',
+                selectedMode: 'single',
+                label: {
+                    normal: {
+                        trigger: 'item',
+                        formatter: "{b} : {c} ({d}%)"
+                    }
+                },
+                radius : '55%',
+                center: ['35%', '50%'],
+                data: db_url_type,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }, {
+                name:'区域',
+                type:'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+                center: ['80%', '50%'],
+                label: {
+                    normal: {
+                        position: 'inner'
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data: db_area
+            },
+            {
+                name:'省份',
+                type:'pie',
+                selectedMode: 'single',
+                radius: ['40%', '55%'],
+                center: ['80%', '50%'],
+                data: db_province
+            }
+        ]
+    };
+    pie3_3_option = option;
+    pie3_3.setOption(pie3_3_option);
+    })();
+
+
+    //大数据量面积图
+    (function(){
+        var obj = document.getElementById("shuju");
+        var cache_b = true;// '{{cache_b|safe}}'=='True';
+        if(!cache_b || !obj)return;
+        var shuju = echarts.init(obj);
+
+        var base = +new Date(1968, 9, 3);
+        var oneDay = 24 * 3600 * 1000;
+        var date = [];
+
+        var data = [Math.random() * 300];
+        var fdata = [data[0] * -1.00];
+
+        for (var i = 1; i < 100; i++) {
+            var now = new Date(base += oneDay);
+            date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+            var datav = Math.round((Math.random() - 0.5) * 20 + data[i - 1]);
+            data.push(datav);
+            fdata.push(datav * -1.00);
+        }
+        var cache_type = {{cache_type|safe}};
+        var cache_type_value = {{cache_type_value|safe}};
+        var cache_key = date;
+        var cache_pass = data;
+        var cache_time_error = data;
+        var cache_find_cf = data;
+        var cache_find_error = data;
+        var cache_Exception = data;
+        var cache_END = [];
+        var cache_END_time = fdata;
+
+        {% if cache_b %}
+            cache_key = {{cache_key|safe}};
+            cache_pass = {{cache_pass|safe}};
+            cache_time_error = {{cache_time_error|safe}};
+            cache_find_cf = {{cache_find_cf|safe}};
+            cache_find_error = {{cache_find_error|safe}};
+            cache_Exception = {{cache_Exception|safe}};
+            cache_END = {{cache_END|safe}};
+            cache_END_time = [];
+        {% endif %}
+
+        for (var i in cache_END) {
+            cache_END_time.push(i * -1.00);
+        }
+
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            },
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        title: {
+            text: '每个网址爬取情况',
+        },
+        legend: {
+            top: '7%',
+            data: cache_type_value
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            data: cache_key,
+            axisTick: {
+                alignWithLabel: true
+            }
+        },
+        yAxis: {
+            type: 'value'
+        },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+        }, {
+            start: 0,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        }],
+        series: [
+            {
+                name: cache_type['cache_Exception'],
+                type:'bar',
+                stack: '总量',
+                smooth:true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: '#d53a35'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_Exception
+            },
+            {
+                name: cache_type['cache_find_error'],
+                type:'bar',
+                stack: '总量',
+                smooth:true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(255, 70, 131)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_find_error
+            },
+            {
+                name: cache_type['cache_find_cf'],
+                type:'bar',
+                stack: '总量',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: '#2f4554'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_find_cf
+            },
+            {
+                name: cache_type['cache_time_error'],
+                type:'bar',
+                stack: '总量',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: '#d48265'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_time_error
+            },
+            {
+                name: cache_type['cache_pass'],
+                type:'bar',
+                stack: '总量',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: '#4ff327'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_pass
+            },
+            {
+                name: cache_type['cache_END'],
+                type:'bar',
+                stack: '总量',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(0, 0, 0)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: cache_END_time
+            }
+        ]
+    };
+        shuju.setOption(option);
+    })();
+
     </script>
 
 </html>
+

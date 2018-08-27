@@ -72,6 +72,7 @@ def test_list_page(request):  # 爬取数据
         e_date = util.getDT() if e_date == '' else e_date
 
         resolve_key = str((service_type, 'tt', b_date, e_date))  # 构建 resolve_key
+        request.session['resolve_key'] = resolve_key
 
         if (not rerun) and resolve_key in cache.Data.db_pac.keys():  # 判断是否已有数据，根据 resolve_key，并且数据库数据未有变化
             db_dbo_new = SpidersBaseSource.get_by_resolve_key(resolve_key)

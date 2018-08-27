@@ -5,6 +5,61 @@ import xlrd
 from dateutil import parser
 
 
+# 提取日志中参数值
+def get_log_key_value(pstr, key):
+    for sl in pstr.split(','):
+        if sl.find(key) > -1:
+            return sl[sl.rfind('=') + 1:]
+
+
+# 提取参数规则 key
+def get_resolve_key(request):
+    return request.session.get('resolve_key')
+
+
+# 实现参数执行函数
+def defun(this, fun, *a, **p):
+    return eval(fun)(*a, **p) if p else eval(fun)(*a)
+
+
+# 数组（array）提取其中对象属性（k）值的数组，是否值唯一（qy）默认唯一
+def find_p1(array, k, qy=True):
+    ret = {}
+    if qy:
+        for i in array:
+            if type(i) == type({}) and k in i.keys():
+                ret.update({i[k]: 'true'})
+            elif hasattr(i, k):
+                ret.update({getattr(i, k): 'true'})
+        ret = list(ret.keys())
+    else:
+        ret = []
+        for i in array:
+            if type(i) == type({}) and k in i.keys():
+                ret.append(i[k])
+            elif hasattr(i, k):
+                ret.append(getattr(i, k))
+
+    return ret
+
+
+# 数组提取其中对象属性值等于 zi 的对象
+def find_p(array, **p):
+    ret = []
+    ro = {}
+    for i in array:
+        ro = i
+        for k in p.keys():
+            if hasattr(i, k) and getattr(i, k) == p[k]:
+                pass
+            else:
+                ro = {}
+                break
+        if ro:
+            ret.append(ro)
+    return ret
+
+
 # 提取时间格式数据
 def getDT(dti=1):
     return time.strftime("%Y-%m-%d" if dti == 1 else "%Y-%m-%d %H:%M:%S", time.localtime())

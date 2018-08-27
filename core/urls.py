@@ -9,7 +9,6 @@ urlpatterns = [
     path('', cv.index_db),
     path('look/', cv.index_look),
     path('edit/', cv.index_edit),
-    path('c/', cv.index_cl),
     path('i/', cv.index_mg),
     path('i/del/', cv.index_del),
     path('i/qiy/', cv.index_qiy),

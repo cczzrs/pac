@@ -1,5 +1,5 @@
 import threading, pickle, json, time
-from core import tests, cache, util
+from core import service, cache, util
 from core.models import SpidersBaseSource
 from django.shortcuts import render, HttpResponse
 
@@ -7,11 +7,6 @@ from django.shortcuts import render, HttpResponse
 def index_mg(request):  # 管理首页
     dbs = SpidersBaseSource.tfilter()
     return render(request, 'core/manage/index.html', {'dbs': dbs})
-
-
-def index_cl(request):  # 控制台
-    dbs = SpidersBaseSource.tfilter()
-    return render(request, 'core/manage/control.html', {'dbs': dbs})
 
 
 def index_look(request):  # 查看
@@ -95,8 +90,8 @@ def index_up(request):  # 更新
 
 def index_db(request):  # 录数据页面
     if request.session.session_key not in cache.Data.LPs.keys():
-        pac_list_page = tests.pac_list_page()
-        pac_item_page = tests.pac_item_page()
+        pac_list_page = service.pac_list_page()
+        pac_item_page = service.pac_item_page()
         pac_list_page.sdata = pac_item_page.sdata = cache.sdatao()
         cache.Data.LPs[request.session.session_key] = pac_list_page
         cache.Data.IPs[request.session.session_key] = pac_item_page

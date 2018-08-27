@@ -17,7 +17,8 @@ from TXSP import testSpider, cache, settings as sets
 class TS(object):
 
     def processRequest(self, URL_TO, dbo, driver):
-        self.printT("##########TS.processRequest##########")
+        self.printT("##########TS.processRequest=%s##########" % URL_TO)
+        stime = time.time()
 
         contentPage = 1
         contentCount = 0
@@ -137,8 +138,8 @@ class TS(object):
 
                     self.printT('ldo=' + str(ldo))
 
-                self.printT('===this page Count=%d, time_error=%d, find_cf=%d, find_error=%d, Exception=%d==='
-                            % (len(lbs), time_error, error_t, find_error, find_cf))
+                self.printT('===this page Count=%d, time_error=%d, find_cf=%d, find_error=%d, Exception=%d, BY_URL=%s,==='
+                            % (len(lbs), time_error, error_t, find_error, find_cf, URL_TO))
                 if len(lbs) == error_t + find_error + find_cf:
                     self.printT('!!!!!!!!!!find all data over!!!!!!!!!!')
                     break
@@ -177,6 +178,8 @@ class TS(object):
         if len(THIS_URLS) > 0:
             self._s_data.dbo_urls[URL_TO] = list(THIS_URLS.values())
         self.printT('self._s_data.dbo_urls[URL_TO]=' + str(len(self._s_data.dbo_urls)))
+        self.printT("##########END=%s, TS.processRequest=%s,##########" % (time.time()-stime, URL_TO))
+
         return THIS_URLS
 
     def test_run_buid(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data, to_log):
