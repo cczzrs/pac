@@ -69,13 +69,13 @@
     
     
     <!-- start: Css -->
-    <link rel="stylesheet" type="text/css" href="/asset/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
 
     <!-- plugins -->
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/datatables.bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/animate.min.css"/>
-    <link href="/asset/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/datatables.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/animate.min.css"/>
+    <link href="/static/css/style.css" rel="stylesheet">
     <!-- end: Css -->
 </head>
 
@@ -88,6 +88,7 @@
             <button id="edit_db" class="btn btn-danger" style="margin-top: 0px;"><i class="fa fa-pencil"></i> 编辑</button>
             <button id="del_db" class="btn btn-danger" style="margin-top: 0px;"><i class="fa fa-pencil"></i> 删除</button>
             <button id="qiy_db" class="btn btn-danger" style="margin-top: 0px;"><i class="fa fa-pencil"></i> 启用</button>
+            <button id="jiny_db" class="btn btn-danger" style="margin-top: 0px;"><i class="fa fa-pencil"></i> 禁用</button>
         </div></div>
     <div class="image-container set-full-height" style="background-image: url('/static/img/wizard-book.jpg')">
         <!--   Creative Tim Branding   -->
@@ -136,14 +137,14 @@
                                                   <th class="sorting" tabindex="0" aria-controls="datatables-example" rowspan="1" colspan="1" aria-label="LastRun date: activate to sort column ascending" style="max-width: 10%;">最后运行时间</th>
                                                   <th class="sorting" tabindex="0" aria-controls="datatables-example" rowspan="1" colspan="1" aria-label="Update date: activate to sort column ascending" style="max-width: 10%;">更新时间</th></tr>
                                               </thead>
-                                              <tbody>
+                                              <tbody style="font-weight: 500;">
                                                 {%for itm in dbs %}
                                                     <tr tid="{{ itm.id }}">
                                                       <td>{{ itm.id }}</td>
                                                       <td>{{ itm.service_type }}</td>
                                                       <td>{{ itm.city }}</td>
                                                       <td class="url_source">{{ itm.url_source }}</td>
-                                                      <td>{{ itm.url_type }}</td>
+                                                      <td class="status{{ itm.url_type }}">{{ itm.url_type }}</td>
                                                       <td>{{ itm.run_time }}</td>
                                                       <td>{{ itm.update_time }}</td>
                                                     </tr>
@@ -196,21 +197,29 @@
             $(this).addClass("selected");
             selected_tid = $(this).attr('tid');
         });
+
+        // 状态显示优化
+        $('[class*="status-2"]').css({'color': '#c23531'}).text('执行失败');
+        $('[class*="status-1"]').css({'color': '#2f4554'}).text('已禁用');
+        $('[class*="status0"]').css({'color': '#61a0a8'}).text('已删除');
+        $('[class*="status1"]').css({'color': '#d48265'}).text('待启用');
+        $('[class*="status2"]').css({'color': '#91c7ae'}).text('执行中');
+        $('[class*="status3"]').css({'color': '#749f83'}).text('测试');
     });
     </script>
 
     <!-- start: Javascript -->
-    <!-- <script src="/asset/js/jquery.min.js"></script> -->
-    <script src="/asset/js/jquery.ui.min.js"></script>
-    <script src="/asset/js/bootstrap.min.js"></script>
+    <!-- <script src="/static/js/jquery.min.js"></script> -->
+    <script src="/static/js/jquery.ui.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 
     <!-- plugins -->
-    <script src="/asset/js/plugins/moment.min.js"></script>
-    <script src="/asset/js/plugins/jquery.datatables.min.js"></script>
-    <script src="/asset/js/plugins/datatables.bootstrap.min.js"></script>
-    <script src="/asset/js/plugins/jquery.nicescroll.js"></script>
+    <script src="/static/js/plugins/moment.min.js"></script>
+    <script src="/static/js/plugins/jquery.datatables.min.js"></script>
+    <script src="/static/js/plugins/datatables.bootstrap.min.js"></script>
+    <script src="/static/js/plugins/jquery.nicescroll.js"></script>
     <!-- custom -->
-    <script src="/asset/js/main.js"></script>
+    <script src="/static/js/main.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
         $('#datatables-example').DataTable();
@@ -234,6 +243,7 @@
         ccrow.children('div').attr('class', 'col-sm-3');
         ccrow.children('div:eq(0)').after(ih);
 
+        $("button[id$='_db']").attr({'style': 'padding:5px 12px;margin-top:3px;'});
         $("#look_db").click(function(){tid=getSelect();if(tid){window.location.replace("/pac/r/look/?tid="+tid);}});
         $("#edit_db").click(function(){tid=getSelect();if(tid){window.location.replace("/pac/r/edit/?tid="+tid);}});
         $("#del_db").click(function(){tid=getSelect();if(tid){
@@ -261,7 +271,8 @@
                 type:"POST",
                 dataType:"TEXT",
                 success: function(rets1){
-                    console.info('/pac/r/i/del/='+ rets1);
+                    console.info('/pac/r/i/qiy/='+ rets1);
+                    rets1 = eval('('+rets1+')');
                     if(rets1 && rets1.status && rets1.status=='200'){ // 判断是否成功
                         alert('启用成功！');
                         window.location.replace("/pac/r/i");
@@ -271,7 +282,26 @@
                 }
             });
         }});
+        $("#jiny_db").click(function(){tid=getSelect();if(tid){
+            $.ajax({
+                url:"/pac/r/i/jiny/",
+                data:{'tid':tid},
+                type:"POST",
+                dataType:"TEXT",
+                success: function(rets1){
+                    console.info('/pac/r/i/jiny/='+ rets1);
+                    rets1 = eval('('+rets1+')');
+                    if(rets1 && rets1.status && rets1.status=='200'){ // 判断是否成功
+                        alert('禁用成功！');
+                        window.location.replace("/pac/r/i");
+                    }else{
+                        alert('禁用失败！');
+                    }
+                }
+            });
+        }});
     });
 
     </script>
+
 </html>

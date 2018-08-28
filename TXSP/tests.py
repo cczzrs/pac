@@ -39,3 +39,13 @@ print(t)
 print(hash(t))
 print(hash(t2))
 print(hash(t3))
+
+
+# 提取日志中参数值
+def get_log_key_value(pstr, key):
+    for sl in pstr.split(','):
+        if sl.find(key) > -1:
+            return sl[sl.rfind('=') + 1:]
+
+url = ''
+get_log_key_value(url, 'BY_URL')

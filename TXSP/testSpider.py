@@ -183,8 +183,15 @@ class TS(object):
         return THIS_URLS
 
     def test_run_buid(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data, to_log):
-        print(to_log)
+        prt = 'test_run_buid start:%s' % to_log
+        print(prt)
+        s_data.test_list_page_prints.append(prt)
+
         TS().test_run(url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data)
+
+        prt = 'test_run_buid stop:%s' % to_log
+        print(prt)
+        s_data.test_list_page_prints.append(prt)
 
     def test_run(self, url, pw, pn, pt, pg, prs, pr, b_date, e_date, s_data):
         if b_date == '' and e_date == '':

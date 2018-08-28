@@ -22,7 +22,7 @@ function pass(dbo){
 	   			'province': '广东省',
 		   			'city': '广州',
 		   		'url_type': '1',
-				   	'tags': '1',
+				   	'tags': 'tt',
 			   	'run_time': '2018-08-09',
 				   	 'bz1': 'bz1',
 			   		 'bz2': 'bz2',
@@ -36,7 +36,8 @@ function pass(dbo){
 		   			  'cpage_type': '1',
 				   'cresolve_type': '1',
 				   'cresolve_rule': 'XPATH',
-			   	 'cresolve_source': '[["//*[@id=\\"container\\"]/div/div/div[1]/div[2]/div/table/tbody/tr/td/table[1]"]]'
+			   	 'cresolve_source': '[["//*[@id=\\"container\\"]/div/div/div[1]/div[2]/div/table/tbody/tr/td/table[1]"]]',
+			   	 'content_page_rule': "{'resolve_type': '1', 'resolve_rule': 'XPATH', 'resolve_source': '[[\"//*[@id=\\\"container\\\"]/div/div/div[1]/div[2]/div/table/tbody/tr/td/table[1]\"]]'}"
 		}
 	if(!dbo || dbo.length < 1){dbo = db_i;}
 
@@ -46,7 +47,7 @@ function pass(dbo){
     $("input[name='area']").auto_show(dbo['area']);
     $("input[name='province']").auto_show(dbo['province']);
     $("input[name='city']").auto_show(dbo['city']);
-    $("input[name='url_type']").auto_show(dbo['url_type']);
+    $("select[name='url_type']").val(dbo['url_type']).change();
     $("select[name='tags']").val(dbo['tags']).change();
     $("input[name='run_time']").val(dbo['run_time']).change();
    	$("textarea[name='bz1']").auto_show(dbo['bz1']);
@@ -67,6 +68,6 @@ function pass(dbo){
     $("input[name='cresolve_type']").auto_show(content_page_rule['resolve_type']);
     $("input[name='cresolve_rule']").auto_show(content_page_rule['resolve_rule']);
     $("input[name='cresolve_source']").auto_show(content_page_rule['resolve_source']);
-    
+
 }
 if(!pass_show){pass();} // 执行

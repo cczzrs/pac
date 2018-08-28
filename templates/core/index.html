@@ -92,7 +92,6 @@
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">业务模块</label>
                                                     <select class="form-control valid" aria-invalid="false" name="service_type">
-                                                        <option disabled="disabled"></option>
                                                         <option selected="selected">对外招标</option>
                                                         <option>实地控股</option>
                                                         <option>其他</option>
@@ -122,20 +121,21 @@
                                             <div class="col-sm-4" style="">
                                                 <div class="input-group">
                                                     <div class="form-group label-floating">
-                                                        <label class="control-label">类型</label>
-                                                        <input name="url_type" type="text" class="form-control">
+                                                        <label class="control-label">录入状态</label>
+                                                        <select class="form-control valid" aria-invalid="false" name="url_type">
+                                                            <option value="-2" disabled="disabled">执行失败</option>
+                                                            <option value="-1" disabled="disabled">已禁用</option>
+                                                            <option value="0" disabled="disabled">已删除</option>
+                                                            <option value="1" selected="selected">待启用</option>
+                                                            <option value="2">执行中</option>
+                                                            <option value="3">测试</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">批次</label>
+                                                    <label class="control-label">标签</label>
                                                     <select class="form-control valid" aria-invalid="false" name="tags">
-                                                        <option disabled="" selected=""></option>
-                                                        <option>1 </option>
-                                                        <option>2 </option>
-                                                        <option>3 </option>
-                                                        <option>4 </option>
-                                                        <option>5 </option>
-                                                        <option>6+ </option>
+                                                        <option selected='selected' >tt</option>
                                                     </select>
                                                     <span class="material-input"></span>
                                                 </div>
@@ -232,9 +232,6 @@
                                                         <option>1</option>
                                                         <option>2</option>
                                                         <option>3</option>
-                                                        <option>4</option>
-                                                        <option>5</option>
-                                                        <option>6</option>
                                                     </select>
                                                     <span class="material-input"></span>
                                                 </div>
@@ -400,11 +397,11 @@
         }
     });
     
-    function loadt(){
+    function loadt(){return;
         // var hshowInterval = setInterval(function(){}, 5);
         var rets = '===this page Count=15, find_cf=0, find_error=0, Exception=0===';
-            alert(rets.split(',').toString());
-            alert(JSON.stringify(rets.split(',')));
+        alert(rets.split(',').toString());
+        alert(JSON.stringify(rets.split(',')));
     }
     $('#logo_a').click(function(){loadt();});
 
@@ -632,10 +629,13 @@
         });
     });
     </script>
+    <script type="text/javascript">
+        var pass_show = false;
+    </script>
     {% if dbi %}
-        <script type="text/javascript">
-            var pass_show = true;
-        </script>
+    <script type="text/javascript">
+        var pass_show = true;
+    </script>
         <!--  show model data dbi by (!pass_show) -->
         <script src="/static/js/SH.js"></script>
         <script type="text/javascript">

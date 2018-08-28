@@ -1,8 +1,9 @@
 /*----------------------折线图-----------------------*/
 //折线图堆叠
 (function(){
-	
-	var myChart = echarts.init(document.getElementById("Stack"));
+	var obj = document.getElementById("Stack");
+	if(!obj)return;
+	var myChart = echarts.init(obj);
 	
 	option = {
     title: {
@@ -74,7 +75,9 @@ myChart.setOption(option);
 //堆叠区域图
 (function(){
 	
-	var area = echarts.init(document.getElementById("area"));
+	var obj = document.getElementById("area");
+	if(!obj)return;
+	var area = echarts.init(obj);
 	
 	option = {
     title: {
@@ -161,7 +164,9 @@ area.setOption(option);
 //对数轴
 (function(){
 	
-	var step = echarts.init(document.getElementById("step"));
+	var obj = document.getElementById("step");
+	if(!obj)return;
+	var step = echarts.init(obj);
 	
 	option = {
     title: {
@@ -219,19 +224,21 @@ step.setOption(option);
 
 //大数据量面积图
 (function(){
-	var shuju = echarts.init(document.getElementById("shuju"));
+	var obj = document.getElementById("shuju");
+	if(!obj)return;
+	var shuju = echarts.init(obj);
 	
 	var base = +new Date(1968, 9, 3);
-var oneDay = 24 * 3600 * 1000;
-var date = [];
+	var oneDay = 24 * 3600 * 1000;
+	var date = [];
 
-var data = [Math.random() * 300];
+	var data = [Math.random() * 300];
 
-for (var i = 1; i < 20000; i++) {
-    var now = new Date(base += oneDay);
-    date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
-    data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
-}
+	for (var i = 1; i < 20000; i++) {
+		var now = new Date(base += oneDay);
+		date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+		data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+	}
 
 option = {
     tooltip: {
@@ -319,27 +326,29 @@ option = {
 //动态数据+时间坐标轴
 (function(){
 	
-	var trends = echarts.init(document.getElementById("trends"));
+	var obj = document.getElementById("trends");
+	if(!obj)return;
+	var trends = echarts.init(obj);
 	
 	function randomData() {
-    now = new Date(+now + oneDay);
-    value = value + Math.random() * 21 - 10;
-    return {
-        name: now.toString(),
-        value: [
-            [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-            Math.round(value)
-        ]
-    }
-}
+		now = new Date(+now + oneDay);
+		value = value + Math.random() * 21 - 10;
+		return {
+			name: now.toString(),
+			value: [
+				[now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
+				Math.round(value)
+			]
+		}
+	}
 
-var data = [];
-var now = +new Date(1997, 9, 3);
-var oneDay = 24 * 3600 * 1000;
-var value = Math.random() * 1000;
-for (var i = 0; i < 1000; i++) {
-    data.push(randomData());
-}
+	var data = [];
+	var now = +new Date(1997, 9, 3);
+	var oneDay = 24 * 3600 * 1000;
+	var value = Math.random() * 1000;
+	for (var i = 0; i < 1000; i++) {
+		data.push(randomData());
+	}
 
 option = {
     title: {

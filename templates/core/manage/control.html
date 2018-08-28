@@ -15,11 +15,11 @@
     <link href="/static/css/demo.css" rel="stylesheet" />
 
     <!-- chart -->
-    <link rel="stylesheet" href="/asset/css/amazeui.css" />
-    <link rel="stylesheet" href="/asset/css/core.css" />
-    <link rel="stylesheet" href="/asset/css/menu.css" />
-    <link rel="stylesheet" href="/asset/css/index.css" />
-    <link rel="stylesheet" href="/asset/css/admin.css" />
+    <link rel="stylesheet" href="/static/css/amazeui.css" />
+    <link rel="stylesheet" href="/static/css/core.css" />
+    <link rel="stylesheet" href="/static/css/menu.css" />
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="stylesheet" href="/static/css/admin.css" />
 
     <style type="text/css">
         .selectting{
@@ -61,13 +61,13 @@
     </style>
     
     <!-- start: Css -->
-    <link rel="stylesheet" type="text/css" href="/asset/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
 
     <!-- plugins -->
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/datatables.bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/asset/css/plugins/animate.min.css"/>
-    <link href="/asset/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/datatables.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/plugins/animate.min.css"/>
+    <link href="/static/css/style.css" rel="stylesheet">
     <!-- end: Css -->
 </head>
 
@@ -148,22 +148,23 @@
     <script src="/static/js/jquery.validate.min.js"></script>
 
     <!-- chart -->
-    <script type="text/javascript" src="/asset/js/charts/echarts.min.js" ></script>
-    <!-- <script type="text/javascript" src="/asset/js/charts/controlChart.js" ></script> -->
+    <script type="text/javascript" src="/static/js/charts/echarts.min.js" ></script>
+    <!-- <script type="text/javascript" src="/static/js/charts/controlChart.js" ></script> -->
 
     <script type="text/javascript">
     
 
     var charto = {}; // 显示图形集合
      
-    //饼状图
+    //饼状图1
+    var pie3 = {};
     (function(){
         if(!document.getElementById("pie3"))return; 
-    var pie3 = echarts.init(document.getElementById("pie3"));
+    pie3 = echarts.init(document.getElementById("pie3"));
 
     option = {
         title : {
-            text: '所有网址爬取结果类型',
+            text: '所有网址爬取状态',
             x:'center'
         },
         tooltip : {
@@ -173,7 +174,7 @@
         legend: {
             orient: 'vertical',
             left: 'left',
-            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            data: ['待爬取','爬取中','已爬取']
         },
         toolbox: {
             show : true,
@@ -191,17 +192,15 @@
         calculable : true,
         series : [
             {
-                name: '访问来源',
+                name: '状态',
                 type: 'pie',
                 radius : '55%',
                 center: ['50%', '60%'],
                 selectedMode: 'single',
                 data:[
-                    {value:335, name:'直接访问'},
-                    {value:310, name:'邮件营销'},
-                    {value:234, name:'联盟广告'},
-                    {value:135, name:'视频广告'},
-                    {value:1548, name:'搜索引擎'}
+                    {value:1, name:'待爬取'},
+                    {value:1, name:'爬取中'},
+                    {value:1, name:'已爬取'}
                 ],
                 itemStyle: {
                     emphasis: {
@@ -335,13 +334,13 @@
     pie3_3.setOption(pie3_3_option);
     })();
 
-
+    var shuju = {};
     //大数据量面积图
     (function(){
         var obj = document.getElementById("shuju");
         var cache_b = true;// '{{cache_b|safe}}'=='True';
         if(!cache_b || !obj)return;
-        var shuju = echarts.init(obj);
+        shuju = echarts.init(obj);
 
         var base = +new Date(1968, 9, 3);
         var oneDay = 24 * 3600 * 1000;
@@ -368,7 +367,7 @@
         var cache_END = [];
         var cache_END_time = fdata;
 
-        {% if cache_b %}
+        {% if cache_b == 'true' %}
             cache_key = {{cache_key|safe}};
             cache_pass = {{cache_pass|safe}};
             cache_time_error = {{cache_time_error|safe}};
@@ -380,7 +379,7 @@
         {% endif %}
 
         for (var i in cache_END) {
-            cache_END_time.push(i * -1.00);
+            cache_END_time.push(cache_END[i] * -1.00);
         }
 
     option = {
@@ -395,6 +394,7 @@
         },
         title: {
             text: '每个网址爬取情况',
+            x:'center'
         },
         legend: {
             top: '7%',
@@ -588,8 +588,115 @@
         ]
     };
         shuju.setOption(option);
+
     })();
 
+    // 定时更新
+    function ttime(T){
+
+        // 缓存数据
+        var ttime = setInterval(function(){
+            $.ajax({
+                url:"/pac/chart/:/getcachechart()",
+                data:{},
+                type:"POST",
+                dataType:"TEXT",
+                success: function(rets1){
+                    // console.info('/pac/chart/:/getcachechart()='+ rets1);
+                    rets1 = eval('('+rets1+')');
+                    if(!rets1){return;}
+                    if(rets1.cache_b == 'true'){ // 判断是否成功
+
+                    }else if(rets1.cache_b == 'end'){
+                        clearInterval(ttime);
+                    }else if(rets1.cache_b == 'false'){
+                    }
+                    if(rets1['cache_buid'] && rets1['cache_key'] && rets1['cache_END']){
+
+                        var cache_END = rets1['cache_END'];
+                        var cache_END_time = [];
+                        for (var i in cache_END) {
+                            cache_END_time.push(cache_END[i] * -1.00);
+                        }
+
+                        // 图2
+                        var option_up = {xAxis: {data: rets1['cache_key']},
+                                         series:[{data: rets1['cache_Exception']},
+                                                {data: rets1['cache_find_error']},
+                                                {data: rets1['cache_find_cf']},
+                                                {data: rets1['cache_time_error']},
+                                                {data: rets1['cache_pass']},
+                                                {data: cache_END_time}]}
+                        // console.info(option_up);
+                        shuju.setOption(option_up);
+
+                        // 图1
+                        var option_up = {legend: {data: rets1['cache_buid_name']},series : [{data:rets1['cache_buid']}]};
+                        // console.info(option_up);
+                        pie3.setOption(option_up);
+
+                    }
+                }
+            });
+        }, T);
+
+        // 数据库数据
+        var ttime_db = setInterval(function(){
+            $.ajax({
+                url:"/pac/chart/:/getdbchart()",
+                data:{},
+                type:"POST",
+                dataType:"TEXT",
+                success: function(rets1){
+                    // console.info('/pac/chart/:/getdbchart()='+ rets1);
+                    rets1 = eval('('+rets1+')');
+                    if(!rets1){return;}
+
+                    var db_url_type = rets1['db_url_type'];
+                    var db_url_type_name = rets1['db_url_type_name'];
+                    var db_url_type_value = rets1['db_url_type_value'];
+
+                    var db_service_type = rets1['db_service_type'];
+                    var db_service_type_name = rets1['db_service_type_name'];
+                    var db_service_type_value = rets1['db_service_type_value'];
+
+                    var db_city= rets1['db_city'];
+                    var db_city_name = rets1['db_city_name'];
+                    var db_city_value = rets1['db_city_value'];
+
+                    var db_area= rets1['db_area'];
+                    var db_area_name = rets1['db_area_name'];
+                    var db_area_value = rets1['db_area_value'];
+
+                    var db_province= rets1['db_province'];
+                    var db_province_name = rets1['db_province_name'];
+                    var db_province_value = rets1['db_province_value'];
+                    
+                    
+                    var db_name = [];
+                    db_name.push(...db_url_type_name);
+                    // db_name.push(...db_service_type_name);
+                    // db_name.push(...db_city_name);
+                    db_name.push(...db_area_name);
+                    db_name.push(...db_province_name);
+
+
+                    var option_up = {
+                        legend: {data: db_name},
+                        series : [{data: db_url_type}, 
+                                  {data: db_area},
+                                  {data: db_province}]
+                    }
+                    pie3_3.setOption(option_up);
+                },
+                error: function(e){
+                    alert(e.statusText);
+                    clearInterval(ttime_db);
+                }
+            });
+        }, T*3/2);
+    }
+    ttime(1000);
     </script>
 
 </html>

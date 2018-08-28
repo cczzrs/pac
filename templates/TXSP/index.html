@@ -436,7 +436,7 @@
 			function paseNPL(i,o){
 				var ndate = o['news_date']?o['news_date']:'<span color="red">no date</span>';
 
-				return '<div>'+ i + '-' + ndate + '-' +'<a style="color: blue;" target="_blank" href="'+o['url_source']+'">'+o['news_title'] +'</a></div>';
+				return '<div>【'+ i + '】-【' + ndate + '】-' +'<a style="color: blue;" target="_blank" href="'+o['url_source']+'">'+o['news_title'] +'</a></div>';
 			}
 			var npl = $(".new_page_list");
 			npl.html('');

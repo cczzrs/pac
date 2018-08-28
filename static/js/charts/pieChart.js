@@ -2,6 +2,7 @@
 //环形图
 (function(){
 	
+if(!document.getElementById("pie1"))return;
 var pie1 = echarts.init(document.getElementById("pie1"));
 
 option = {
@@ -61,7 +62,8 @@ pie1.setOption(option);
 
 //嵌套环形图
 (function(){
-	
+	   
+if(!document.getElementById("pie2"))return;
 var pie2 = echarts.init(document.getElementById("pie2"));
 
 option = {
@@ -127,7 +129,7 @@ pie2.setOption(option);
 
 //饼状图
 (function(){
-	
+    if(!document.getElementById("pie3"))return;	
 var pie3 = echarts.init(document.getElementById("pie3"));
 
 option = {
@@ -144,6 +146,20 @@ option = {
         left: 'left',
         data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
     },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
     series : [
         {
             name: '访问来源',
@@ -172,9 +188,72 @@ pie3.setOption(option);
 })();
 
 
+//饼状大图
+var pie3_3 = {};
+var pie3_3_option = {};
+(function(){
+    if(!document.getElementById("pie3_3"))return; 
+    pie3_3 = echarts.init(document.getElementById("pie3_3"));
+
+option = {
+    title : {
+        text: '某站点用户访问来源',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:234, name:'联盟广告'},
+                {value:135, name:'视频广告'},
+                {value:1548, name:'搜索引擎'}
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+pie3_3_option = option;
+pie3_3.setOption(pie3_3_option);
+})();
+
+
 //南丁格尔玫瑰图
 (function(){
-	
+if(!document.getElementById("pie4"))return;
 var pie4 = echarts.init(document.getElementById("pie4"));
 
 option = {

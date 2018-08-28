@@ -9,17 +9,12 @@ from dateutil import parser
 def get_log_key_value(pstr, key):
     for sl in pstr.split(','):
         if sl.find(key) > -1:
-            return sl[sl.rfind('=') + 1:]
+            return sl[sl.rfind(key+'=') + len(key) + 1:]
 
 
 # 提取参数规则 key
 def get_resolve_key(request):
     return request.session.get('resolve_key')
-
-
-# 实现参数执行函数
-def defun(this, fun, *a, **p):
-    return eval(fun)(*a, **p) if p else eval(fun)(*a)
 
 
 # 数组（array）提取其中对象属性（k）值的数组，是否值唯一（qy）默认唯一

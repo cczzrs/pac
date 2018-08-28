@@ -31,7 +31,7 @@ def index_del(request):  # 删除
             print('SpidersBaseSource.update()')
             update = {'url_type': '0'}
             print('index_del tid=%s, update=%s' % (tid, str(update)))
-            ret = list(SpidersBaseSource.objects.filter(id=tid).update(**update))
+            ret = SpidersBaseSource.objects.filter(id=tid).update(**update)
             status = '200'
     return HttpResponse(str({'status': status, 'tid': ret}))
 
@@ -45,8 +45,23 @@ def index_qiy(request):  # 启用
         if tid:
             print('SpidersBaseSource.update()')
             update = {'url_type': '2'}
-            print('index_del tid=%s, update=%s' % (tid, update))
-            ret = list(SpidersBaseSource.objects.filter(id=tid).update(**update))
+            print('index_qiy tid=%s, update=%s' % (tid, update))
+            ret = SpidersBaseSource.objects.filter(id=tid).update(**update)
+            status = '200'
+    return HttpResponse(str({'status': status, 'tid': ret}))
+
+
+def index_jiny(request):  # 禁用
+    ret = 'no body!'
+    status = '401'
+    # request.POST
+    if request.method == 'POST':
+        tid = request.POST.get('tid', None)
+        if tid:
+            print('SpidersBaseSource.update()')
+            update = {'url_type': '-1'}
+            print('index_jiny tid=%s, update=%s' % (tid, update))
+            ret = SpidersBaseSource.objects.filter(id=tid).update(**update)
             status = '200'
     return HttpResponse(str({'status': status, 'tid': ret}))
 
