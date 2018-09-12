@@ -1,17 +1,17 @@
 # pac
 
 #### 项目介绍
-python django selenium chrome 测试系统pac 爬虫 
+爬虫、页面列表数据、页面详情数据、增量监控、爬取规则录入、规则列表、规则管理、并发队列、爬取进度 chart图、登录注册、管理员后台等。
 
 #### 软件架构
-软件架构说明
+python nginx uwsgi django shiro rest  selenium chrome
 
 
 #### 安装教程
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. 环境 python nginx uwsgi chrome
+2. 运行 uwsgi --ini ./pac/my_uwsgi.ini
+3. http://0-0.cc/pac/wiki
 
 #### 使用说明
 
@@ -19,19 +19,5 @@ python django selenium chrome 测试系统pac 爬虫
 2. xxxx
 3. xxxx
 
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [http://git.mydoc.io/](http://git.mydoc.io/)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### find me
+cczzrs@aliyun.com
