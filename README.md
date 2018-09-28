@@ -1,11 +1,15 @@
-# pac
+# pac by cczzrs
+
 
 #### 项目介绍
-爬虫、页面列表数据、页面详情数据、增量监控、爬取规则录入、规则列表、规则管理、并发队列、爬取进度 chart图、登录注册、管理员后台等。
+爬虫、页面列表数据、页面详情数据、增量监控、爬取规则录入、规则列表、规则管理、
+    并发队列、爬取进度 chart图展示、登录注册、管理员后台等。
+地址 http://0-0.cc/pac
+
 
 #### 软件架构
-python3 nginx uwsgi django shiro rest selenium chrome lxml
-mysql
+linux docker mysql
+nginx uwsgi python3 django pymysql rest selenium chrome lxml
 
 
 #### 安装教程
@@ -14,6 +18,7 @@ mysql
 2. 运行 uwsgi --ini ./pac/my_uwsgi.ini
 2. 运行 nginx -c ./pac/nginx.conf
 3. 详情查看 http://0-0.cc/pac/wiki
+
 
 #### 使用说明
 
@@ -31,6 +36,9 @@ mysql
 
 3.静态文件 static 集成路径 (nginx static file path)
     STATIC_ROOT = r'C:/Users/static_data/' if this_os else r'/home/pac/static_data/'
+
+3. 详情查看 ./pac/settings.py
+
 
 #### find me
 cczzrs@aliyun.com

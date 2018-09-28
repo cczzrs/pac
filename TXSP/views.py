@@ -2,7 +2,8 @@ from django.shortcuts import render, HttpResponse
 from dateutil import parser
 from core import util
 from core.models import SpidersBaseSource
-from TXSP import testSpider, cache, settings
+from TXSP import cache, settings
+from spiders import testSpider
 from concurrent.futures import ThreadPoolExecutor
 
 

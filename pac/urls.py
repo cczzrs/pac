@@ -13,15 +13,15 @@ def index(request):  # 主页
 
 
 urlpatterns = [
-    path('', index, name='index'),  # 默认进入首页
+    path('pac/', index, name='index'),  # 默认进入首页
 
-    path('rest/', include(rest_urls.router.urls)),  # rest
-    path('rest/', include('rest_framework.urls', namespace='rest_framework')),
+    path('pac/rest/', include(rest_urls.router.urls)),  # rest
+    path('pac/rest/', include('rest_framework.urls', namespace='rest_framework')),
 
-    path('admin/', admin.site.urls),  # admin 管理员
+    path('pac/admin/', admin.site.urls),  # admin 管理员
 
-    path('users/', include('users.urls')),  # USERS 用户
-    path('users/', include('django.contrib.auth.urls')),  # 将 auth 应用中的 urls 模块包含进来
+    path('pac/users/', include('users.urls')),  # USERS 用户
+    path('pac/users/', include('django.contrib.auth.urls')),  # 将 auth 应用中的 urls 模块包含进来
 
     path('pac/r/', include('core.urls'), name='core'),  # 爬虫数据规则检索 体系
 

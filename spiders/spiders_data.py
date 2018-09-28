@@ -1,3 +1,4 @@
+# 数据结构模板，多个 cache 类模仿
 
 
 class sdata(object):

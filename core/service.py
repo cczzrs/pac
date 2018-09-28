@@ -1,5 +1,6 @@
 import threading
-from core import SpiderBase, cache
+from core import cache
+from spiders import SpiderBase
 from django.shortcuts import render, HttpResponse
 
 
