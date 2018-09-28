@@ -8,12 +8,22 @@ from REST import urls as rest_urls
 app_name = 'index'
 
 
-def index(request):  # 主页
+def index(request):  # 登录后及进入提醒首页（网站数据增量监控提醒模块）
     return render(request, 'TXSP/index.html' if request.user.is_authenticated else 'index.html')
+
+
+def msg(request):  # msg 留言
+    return render(request, 'msg/index.html' if request.user.is_authenticated else 'index.html')
+
+
+def wiki(request):  # wiki 文档
+    return render(request, 'wiki/index.html' if request.user.is_authenticated else 'index.html')
 
 
 urlpatterns = [
     path('pac/', index, name='index'),  # 默认进入首页
+    path('pac/msg/', msg, name='msg'),  # msg 留言
+    path('pac/wiki/', wiki, name='wiki'),  # wiki 文档
 
     path('pac/rest/', include(rest_urls.router.urls)),  # rest
     path('pac/rest/', include('rest_framework.urls', namespace='rest_framework')),
