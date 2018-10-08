@@ -35,17 +35,17 @@
      * templates------项目页面模板资源(html)，
      * TXSP-----------项目提醒（网站数据增量监控提醒）模块，
      * users----------项目用户管理模块，
-     * manage.py------django项目操作入口，
-     * my_uwsgi.ini---uwsgi 启动配置文件 my_uwsgi.ini，
-     * nginx.conf-----nginx 启动配置文件 nginx.conf，
-     * pac_build--------------在 pac 运行环境系统中构建项目并运行 pac ( build and run pac )，
-     * pac_build_mysql.sh-----在 mysql 系统中安装 mysql 数据库并运行，
-     * pac_Dockerfile---------构建 docker 镜像（image）（pac 运行环境系统），
-     * pac_Dockerfile_mysql---构建 docker 镜像（image）（mysql 系统），
-     * pac_init_db.sql--------在 mysql 系统中初始化 mysql 表结构，
-     * pac_init_main_db.sql---在 mysql 系统中初始化 mysql 表结构和数据，
-     * README.md------项目说明，
-     * settings.py----项目全局配置文件 settings.py ，
+     * build--------------在 pac 运行环境系统中构建项目并运行 pac ( build and run pac )，
+     * build_mysql.sh-----在 mysql 系统中安装 mysql 数据库并运行，
+     * Dockerfile---------构建 docker 镜像（image）（pac 运行环境系统），
+     * Dockerfile_mysql---构建 docker 镜像（image）（mysql 系统），
+     * init_db.sql--------在 mysql 系统中初始化 mysql 表结构，
+     * init_main_db.sql---在 mysql 系统中初始化 mysql 表结构和数据，
+     * manage.py----------django项目操作入口，
+     * my_uwsgi.ini-------uwsgi 启动配置文件 my_uwsgi.ini，
+     * nginx.conf---------nginx 启动配置文件 nginx.conf，
+     * README.md----------项目说明，
+     * settings.py--------项目全局配置文件 settings.py ，
 
  * 注意：各个模块也有 settings.py 文件，按就近原则
  

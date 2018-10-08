@@ -118,7 +118,7 @@ RUN pip install PyMySQL
 
 
 # ### build porjeact
-RUN cd /home/ && mkdir /home/uwsgi/
+#RUN cd /home/ && mkdir /home/uwsgi/
 #RUN git clone https://github.com/cczzrs/pac.git
 #RUN python3 /home/pac/manage.py migrate
 #RUN python3 /home/pac/manage.py collectstatic
