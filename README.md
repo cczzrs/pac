@@ -5,7 +5,7 @@
 
 # pac #
 
-[![version](https://img.shields.io/badge/release-0.0.1-lightgrey.svg)](https://github.com/cczzrs/pac)
+[![version](https://img.shields.io/badge/release-0.0.2-lightgrey.svg)](https://github.com/cczzrs/pac)
 
 ### docker ###
     * docker pull cczzrs/cloud-0-0:mysql

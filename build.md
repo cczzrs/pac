@@ -7,13 +7,13 @@ cd /home/
 git clone https://github.com/cczzrs/pac.git
 
 # 检查需要更新的表
-python /home/pac/manage.py makemigrations
+python3 /home/pac/manage.py makemigrations
 
 # 更新表到数据库，如果数据库已存在某个表则会报错，删除（删除需谨慎！[数据]）该表，再执行即可
-python /home/pac/manage.py migrate
+python3 /home/pac/manage.py migrate
 
 # 创建管理员账号（根据提示操作即可）
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 
 # 生成静态文件，做 nginx 指向用，路径默认为 '/home/pac/static_data/static'，修改在：./pac/settings.py:STATIC_ROOT
 python3 /home/pac/manage.py collectstatic

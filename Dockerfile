@@ -116,9 +116,10 @@ RUN apk add --no-cache py3-asn1crypto py3-cffi py3-cryptography py3-lxml
 RUN pip install PyMySQL 
 # ### inserted myTOOL
 
+RUN mkdir /home/uwsgi/
 
 # ### build porjeact
-#RUN cd /home/ && mkdir /home/uwsgi/
+#RUN cd /home/
 #RUN git clone https://github.com/cczzrs/pac.git
 #RUN python3 /home/pac/manage.py migrate
 #RUN python3 /home/pac/manage.py collectstatic
