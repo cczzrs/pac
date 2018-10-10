@@ -8,4 +8,4 @@ RUN apk add --update mysql mysql-client && rm -f /var/cache/apk/*
 COPY build_mysql.sh /build_mysql.sh
 
 EXPOSE 3306
-CMD ["/build_mysql.sh"]
+CMD ["sh /build_mysql.sh"]

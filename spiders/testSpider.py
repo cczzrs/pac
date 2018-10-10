@@ -325,7 +325,7 @@ class TX(object):
     class MyThread(threading.Thread):
         def run(self):
             SName = self.getName()
-            print('run MyThread:'+str())
+            print('run MyThread:%s', SName)
             try:
                 self.threadpooles = ThreadPoolExecutor(sets.TESK_THREAD_POOL_EXECUTOR_LEN)  # 创建线程池
                 with self.threadpooles:
@@ -335,7 +335,7 @@ class TX(object):
                         dbo = eval(str(dbo))
                         count += 1
                         to_log = 'MyThread:%s [%s/%s] TO url_source=%s' % (SName, count, sums, dbo['url_source'])
-                        self.threadpooles.submit(testSpider.TS.test_run_buid,
+                        self.threadpooles.submit(TS.test_run_buid,
                                                  dbo['url_source'], dbo['resolve_page_wait'],
                                                  dbo['resolve_next_page'], dbo['resolve_type'],
                                                  dbo['resolve_rule'], dbo['resolve_sources'],

@@ -13,7 +13,7 @@ File Encoding         : 65001
 Date: 2018-09-29 17:20:20
 */
 
-USER pac;
+USE pac;
 
 SET FOREIGN_KEY_CHECKS=0;
 
