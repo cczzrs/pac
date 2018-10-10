@@ -69,8 +69,10 @@ python3 manage.py createsuperuser
 # 生成静态文件，做 nginx 指向用，路径默认为 '/home/pac/static_data/static'，修改在：./pac/settings.py:STATIC_ROOT
 python3 /home/pac/manage.py collectstatic
 
-# 修改外网 ip ，进入 nginx.conf 第 104 行，把 127.0.0.1 修改为你的外网 IP
+# 修改外网 ip ，vim 进入 nginx.conf 第 104 行
 vim +104 nginx.conf
+# 按 i 开启编辑状态，把 127.0.0.1 修改为你的外网 IP
+# 按 Esc 退出编辑状态，再按 Shift + ZZ 组合键保存并退出
 
 # 运行 uwsgi 启动 pac 项目
 uwsgi --ini /home/pac/my_uwsgi.ini
@@ -83,4 +85,4 @@ ps && tail -fn 30 /home/uwsgi/wsgi_mysite.log
 
 # 无错误即可通过浏览器访问 http://IP/pac
 
-# 注意退出时需要后台改容器，退出 Ctrl + p + q 按组合键即可退出并后台容器
+# 注意退出时需要后台改容器，按 Ctrl + p + q 组合键即可退出并后台容器
