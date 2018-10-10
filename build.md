@@ -17,17 +17,17 @@ cd ./pac/
 docker build -t cczzrs/pac:latest .
 # 或者 or
 # 下载 pac 运行需要的镜像环境 cczzrs/pac:latest
-docker pull cczzrs/pac:latest
+# docker pull cczzrs/pac:latest
 
 # 构建 docker mysql 环境镜像 cczzrs/pac:mysql
 docker build -t cczzrs/pac:mysql -f ./Dockerfile_mysql .
 # 或者 or
 # 下载 pac 数据存储 mysql 的镜像环境 cczzrs/pac:mysql
-docker pull cczzrs/pac:mysql
+# docker pull cczzrs/pac:mysql
 
 
 # 运行 cczzrs/pac:mysql 容器 MYSQL ，监控 3306 端口，共享文件目录 /home/docker/
-docker run -p 3306:3306 -v /home/docker/:/home/docker/ -e MYSQL_DATABASE=admin -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_USER=root -e MYSQL_PASSWORD=root --name MYSQL -d cczzrs/pac:mysql
+docker run -p 3306:3306 -v /home/docker/:/home/docker/ -e MYSQL_DATABASE=admin -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_USER=root -e MYSQL_PASSWORD=root --name MYSQL -itd cczzrs/pac:mysql sh /build_mysql.sh
 
 # 进入容器 MYSQL
 docker exec -it MYSQL sh
@@ -36,6 +36,7 @@ docker exec -it MYSQL sh
 mysql -u root
 
 # 初始化表和数据，[表(init_db.sql) 或者 表和数据(init_main_db.sql)]
+# source /home/docker/pac/init_db.sql;
 source /home/docker/pac/init_main_db.sql;
 
 # 退出数据库
