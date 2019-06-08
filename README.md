@@ -14,9 +14,7 @@
 
 ### 项目介绍 ###
  * 爬虫、页面列表数据、页面详情数据、增量监控、爬取规则录入、规则列表、规则管理、并发队列、爬取进度 chart图展示、登录注册、管理员后台等。
- * 地址 http://0-0.cc/pac
- * 文档 http://0-0.cc/pac/wiki
- * 留言 http://0-0.cc/pac/msg
+ * 在线地址 http://cczzrs.com/pac/chart/
 
 
 ### 项目架构 ###
@@ -83,9 +81,9 @@
     * [./pac/.settings.py]
     * STATIC_ROOT = r'C:/Users/static_data/' if this_os else r'/home/pac/static_data/'
 
- * 详情查看 http://0-0.cc/pac/wiki
+ * 详情查看 https://github.com/cczzrs/pac/blob/master/build.md
 
 
 ### find me ###
- * cczzrs@aliyun.com
- * http://0-0.cc
+ * cwt@cczzrs.com
+ * https://cczzrs.me
