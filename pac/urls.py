@@ -33,7 +33,7 @@ urlpatterns = [
     path('pac/users/', include('users.urls')),  # USERS 用户
     path('pac/users/', include('django.contrib.auth.urls')),  # 将 auth 应用中的 urls 模块包含进来
 
-    path('pac/r/', include('core.urls'), name='core'),  # 爬虫数据规则检索 体系
+    path('pac/set/', include('core.urls'), name='core'),  # 爬虫数据规则检索 体系
 
     path('pac/txv/', include('TXSP.urls'), name='TXSP'),  # 爬虫数据检索提醒 体系
 

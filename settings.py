@@ -43,6 +43,6 @@ DATABASES_ENGINE =  'django.db.backends.mysql'  # 数据库的类型
 DATABASES_NAME =    'pac'       if this_os else 'pac'              # 所使用的的数据库的名字
 DATABASES_USER =    'root'      if this_os else 'root'             # 数据库服务器的用户
 DATABASES_PASSWORD ='root'      if this_os else 'root'             # 密码
-DATABASES_HOST =    '0-0.cc'    if this_os else 'mysql'           # 主机
+DATABASES_HOST =    '0-0.cc'    if this_os else 'mysql'            # 主机
 DATABASES_PORT =    '3306'      if this_os else '3306'             # 端口
 

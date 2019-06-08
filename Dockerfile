@@ -107,7 +107,7 @@ RUN apk update && apk add --no-cache nginx uwsgi python3 uwsgi-python3 \
 # pip (django selenium)
 RUN pip install xlrd xlwt \
 	wheel urlopen urllib3 six setuptools selenium requests pytz \
-	python-dateutil pycparser idna django djangorestframework
+	python-dateutil pycparser idna django==2.1.4 djangorestframework
 	
 # apk to pip
 RUN apk add --no-cache py3-asn1crypto py3-cffi py3-cryptography py3-lxml 
